@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Bunga Abadi</title>
+    <link rel="stylesheet" href="tampilan.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Toko yummie_yAy</h1>
+        <p>By: Dwi Aulia Gevira</p>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2>Selamat Datang di Toko yummie_yAy Kami</h2>
+        <p>Temukan berbagai produk menarik dengan harga terbaik!</p>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <h3>Produk Kami</h3>
+        <div class="product-grid">
+            <div class="product">
+                <img src="jam tangan.jpg" alt="Jam Tangan">
+                <h4>Jam Tangan</h4>
+                <p>Jam tangan modern dengan desain elegan, cocok untuk melengkapi gaya Anda sehari-hari. Tahan air .</p>
+                <div class="product-actions">
+                    <input class="quantity-input" type="number" id="jam tangan-quantity" min="1" value="1">
+                    <button
+                        onclick="addToCart('Jam tangan', 100000, parseInt(document.getElementById('jam tangan-quantity').value))">Beli
+                        Sekarang</button>
+                </div>
+            </div>
+            <div class="product">
+                <img src="gelang.jpg" alt="Gelang">
+                <h4>Gelang Silver</h4>
+                <p>Gelang silver dengan bahan berkualitas tinggi, dirancang untuk menambah kesan mewah dan berkelas
+                    pada penampilan Anda.</p>
+                <div class="product-actions">
+                    <input class="quantity-input" type="number" id="gelang-quantity" min="1" value="1">
+                    <button
+                        onclick="addToCart('Gelang', 150000, parseInt(document.getElementById('gelang-quantity').value))">Beli
+                        Sekarang</button>
+                </div>
+            </div>
+            <div class="product">
+                <img src="parfum.jpg" alt="Parfum">
+                <h4>Parfum</h4>
+                <p>Parfum dengan aroma mewah yang tahan lama, memberikan kesegaran sepanjang hari. </p>
+                <div class="product-actions">
+                    <input class="quantity-input" type="number" id="parfum-quantity" min="1" value="1">
+                    <button
+                        onclick="addToCart('Parfum', 200000, parseInt(document.getElementById('parfum-quantity').value))">Beli
+                        Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pesanan Section -->
+    <section class="cart">
+        <h3>Hasil Pembelian</h3>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Produk</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                <!-- Pesanan items will be dynamically added here -->
+            </tbody>
+        </table>
+        <div class="cart-total" id="cart-total">Total: Rp 0</div>
+        <div class="discount-info">
+            <p><strong>Diskon:</strong></p>
+            <ul>
+                <li>Belanja minimal 2 produk: Diskon 5%</li>
+                <li>Belanja minimal 5 produk: Diskon 35%</li>
+            </ul>
+            <p>Deskripsi diskon: Nikmati diskon spesial kami! Diskon 5% berlaku untuk belanja minimal 2 produk, dan
+                diskon 35% untuk belanja minimal 5 produk.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; <span id="year"></span> Toko yummie_yAy Semua Berhak Belanja</p>
+    </footer>
+
+    <script>
+        const cart = [];
+
+        function addToCart(name, price, quantity) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ name, price, quantity });
+            }
+            updateCart();
+            alert(`${quantity} ${name} telah ditambahkan ke Hasil Pembelian.`);
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            let total = 0;
+            let totalQuantity = 0;
+
+            cart.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>Rp ${item.price.toLocaleString()}</td>
+                    <td>${item.quantity}</td>
+                    <td>Rp ${(item.price * item.quantity).toLocaleString()}</td>
+                `;
+                cartItems.appendChild(row);
+                total += item.price * item.quantity;
+                totalQuantity += item.quantity;
+            });
+
+            let discount = 0;
+            if (totalQuantity >= 5) {
+                discount = total * 0.35;
+            } else if (totalQuantity >= 2) {
+                discount = total * 0.05;
+            }
+
+            total -= discount;
+
+            document.getElementById('cart-total').textContent = `Total: Rp ${total.toLocaleString()} (Diskon: Rp ${discount.toLocaleString()})`;
+        }
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
